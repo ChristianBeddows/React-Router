@@ -21,18 +21,27 @@
   color: #09d3ac;
 }
 
-.page-body {
-  position: absolute;
+.page-background {
+  z-index: -1;
+  position: fixed;
   height: 100%;
   width: 100%;
   background-image: linear-gradient(rgb(80, 80, 80), rgb(70, 70, 70), rgb(50, 50, 50), rgb(40, 40, 40), rgb(30, 30, 30), rgb(20, 20, 20));
+}
+
+body {
+  width: 100%;
+}
+
+.page-body {
+  width: 100%;
 }
 
 .page-title {
   width: 100%;
   height: 100px;
   margin: 0;
-  padding: 20px;
+  padding: 0;
   background-color: #00a5ff;
   color: white;
   font-size: 4em;
@@ -41,7 +50,7 @@
 }
 
 .navigation-bar {
-  width: 100%;
+  width: calc(100% - 20px);
   height: 50px;
   background-color: purple;
   color: white;
@@ -63,5 +72,10 @@
 }
 
 .navigation-bar a {
+  color: white;
+}
+
+.ipsum {
+  padding: 5% 10%;
   color: white;
 }
