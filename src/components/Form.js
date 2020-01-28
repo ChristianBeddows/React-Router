@@ -1,89 +1,81 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Form.css";
 
-class Form extends React.Component {
+const Form = () => {
+    const [form, setForm] = useState({
+        forename: null,
+        surname: null,
+        email: null,
+        affiliation: null,
+        dateOfBirth: null,
+        bio: null,
+    });
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            forename: null,
-            surname: null,
-            email: null,
-            affiliation: null,
-            dateOfBirth: null,
-            bio: null,
-        }
-    }
-
-    handleChange(event) {
+    const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
 
-        this.setState({
-            [name]: value
-        });
-    }
+        setForm({...form, [name]: value});
+    };
 
-    render() {
-        return (
-            <form className="form">
+    return (
+        <form className="form">
 
-                <h2 className="form-title">Enter your Details</h2>
+            <h2 className="form-title">Enter your Details</h2>
 
-                <div className="form-row">
-                    <Forename
-                        forename={this.state.forename}
-                        size="half"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                    <Surname
-                        surname={this.state.surname}
-                        size="half"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                </div>
+            <div className="form-row">
+                <Forename
+                    forename={form.forename}
+                    size="half"
+                    onChange={(event) => handleChange(event)}
+                />
+                <Surname
+                    surname={form.surname}
+                    size="half"
+                    onChange={(event) => handleChange(event)}
+                />
+            </div>
 
-                <div className="form-row">
-                    <Email
-                        email={this.state.email}
-                        size="full"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                </div>
+            <div className="form-row">
+                <Email
+                    email={form.email}
+                    size="full"
+                    onChange={(event) => handleChange(event)}
+                />
+            </div>
 
-                <div className="form-row">
-                    <Affiliations
-                        size="half"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                    <DOB
-                        dateOfBirth={this.state.dateOfBirth}
-                        size="half"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                </div>
+            <div className="form-row">
+                <Affiliations
+                    size="half"
+                    onChange={(event) => handleChange(event)}
+                />
+                <DOB
+                    dateOfBirth={form.dateOfBirth}
+                    size="half"
+                    onChange={(event) => handleChange(event)}
+                />
+            </div>
 
-                <div className="form-row">
-                    <Bio
-                        bio={this.state.bio}
-                        size="full"
-                        onChange={(event) => this.handleChange(event)}
-                    />
-                </div>
+            <div className="form-row">
+                <Bio
+                    bio={form.bio}
+                    size="full"
+                    onChange={(event) => handleChange(event)}
+                />
+            </div>
 
-                <button className="form-submit">Submit</button>
-            </form>
-        );
-    }
-}
+            <button className="form-submit">Submit</button>
+        </form>
+    );
+};
 
 function Forename(props) {
-        return (
-            <div className={"form-field " + props.size}>
-                <label htmlFor="forename">Forename</label>
-                <input id="forename" name="forename" type="text" value={props.forename} onChange={props.onChange}/>
-            </div>
-        );
+    return (
+        <div className={"form-field " + props.size}>
+            <label htmlFor="forename">Forename</label>
+            <input id="forename" name="forename" type="text" value={props.forename} onChange={props.onChange}/>
+        </div>
+    );
 }
 
 function Surname(props) {
