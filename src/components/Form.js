@@ -3,26 +3,25 @@ import {useForm} from 'react-hook-form';
 import "./Form.css";
 
 const Form = () => {
-    const {register, handleSubmit, triggerValidation, watch, errors} = useForm({mode: 'onChange', reValidateMode: 'onChange'});
-    const onSubmit = (event, data) => {
-        event.preventDefault();
-        console.log(data)
-    };
+    const {register, handleSubmit, errors} = useForm({mode: 'onChange'});
     const [form, setForm] = useState({
-        forename: null,
-        surname: null,
-        email: null,
-        affiliation: null,
-        dateOfBirth: null,
-        bio: null,
+        forename: '',
+        surname: '',
+        email: '',
+        affiliation: '',
+        dateOfBirth: '',
+        bio: '',
     });
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+    };
 
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
 
         setForm({...form, [name]: value});
-        triggerValidation(name);
     };
 
     return (
@@ -33,7 +32,7 @@ const Form = () => {
             <div className="form-row">
                 <div className="form-field half">
                     <label htmlFor="forename">Forename</label>
-                    <input name="forename" type="text" ref={register({required: true})}/>
+                    <input name="forename" type="text" value={form.forename} onChange={handleChange} ref={register({required: true})}/>
                     {errors.forename && <Error message="This field is required."/>}
                 </div>
 
