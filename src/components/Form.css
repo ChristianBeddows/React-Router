@@ -74,3 +74,13 @@ form button.form-submit {
 form button.form-submit:hover {
     background-color: #9c009c;
 }
+
+.error-alert {
+    color: red;
+    font-size: 16pt;
+}
+
+.error-alert::before {
+    display: inline;
+    content: "⚠ ";
+}

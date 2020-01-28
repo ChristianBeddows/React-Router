@@ -1,7 +1,13 @@
 import React, {useState} from "react";
+import {useForm} from 'react-hook-form';
 import "./Form.css";
 
 const Form = () => {
+    const {register, handleSubmit, triggerValidation, watch, errors} = useForm({mode: 'onChange', reValidateMode: 'onChange'});
+    const onSubmit = (event, data) => {
+        event.preventDefault();
+        console.log(data)
+    };
     const [form, setForm] = useState({
         forename: null,
         surname: null,
@@ -16,52 +22,58 @@ const Form = () => {
         const value = event.target.value;
 
         setForm({...form, [name]: value});
+        triggerValidation(name);
     };
 
     return (
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
 
             <h2 className="form-title">Enter your Details</h2>
 
             <div className="form-row">
-                <Forename
-                    forename={form.forename}
-                    size="half"
-                    onChange={(event) => handleChange(event)}
-                />
-                <Surname
-                    surname={form.surname}
-                    size="half"
-                    onChange={(event) => handleChange(event)}
-                />
+                <div className="form-field half">
+                    <label htmlFor="forename">Forename</label>
+                    <input name="forename" type="text" ref={register({required: true})}/>
+                    {errors.forename && <Error message="This field is required."/>}
+                </div>
+
+                <div className="form-field half">
+                    <label htmlFor="surname">Surname</label>
+                    <input id="surname" name="surname" type="text" value={form.surname} onChange={handleChange} ref={register({required: true})}/>
+                    {errors.surname && <Error message="This field is required."/>}
+                </div>
+
             </div>
 
             <div className="form-row">
-                <Email
-                    email={form.email}
-                    size="full"
-                    onChange={(event) => handleChange(event)}
-                />
+                <div className="form-field full">
+                    <label htmlFor="email">Email Address</label>
+                    <input id="email" name="email" type="text" value={form.email} onChange={handleChange} ref={register({required: true, pattern: /.*@york.ac.uk/})}/>
+                    {errors.email && <Error message="A valid UoY email address is required."/>}
+                </div>
             </div>
 
             <div className="form-row">
-                <Affiliations
-                    size="half"
-                    onChange={(event) => handleChange(event)}
-                />
-                <DOB
-                    dateOfBirth={form.dateOfBirth}
-                    size="half"
-                    onChange={(event) => handleChange(event)}
-                />
+                <div className="form-field half">
+                    <label>Affiliation</label><br/>
+                    <input className="form-radio-input" type="radio" name="affiliation" value="staff" onChange={handleChange} ref={register({required: true})}/>Staff<br/>
+                    <input className="form-radio-input" type="radio" name="affiliation" value="student" onChange={handleChange} ref={register({required: true})}/>Student<br/>
+                    <input className="form-radio-input" type="radio" name="affiliation" value="associate" onChange={handleChange} ref={register({required: true})}/>Associate<br/>
+                    {errors.affiliation && <Error message="This field is required."/>}
+                </div>
+                <div className="form-field half">
+                    <label htmlFor="dob">Date of Birth</label>
+                    <input id="dob" name="dateOfBirth" type="date" value={form.dateOfBirth} onChange={handleChange} ref={register({required: true, validate: {inThePast: value => Date.parse(value) < Date.now()}})}/>
+                    {errors.dateOfBirth && <Error message="The date must be in the past."/>}
+                </div>
             </div>
 
             <div className="form-row">
-                <Bio
-                    bio={form.bio}
-                    size="full"
-                    onChange={(event) => handleChange(event)}
-                />
+                <div className="form-field full">
+                    <label htmlFor="bio">Bio</label>
+                    <input id="bio" name="bio" type="textarea" className="form-textarea-input" value={form.bio} onChange={handleChange} ref={register({required: true, minLength: 20})}/>
+                    {errors.bio && <Error message="This field must be at least 20 characters long."/>}
+                </div>
             </div>
 
             <button className="form-submit">Submit</button>
@@ -69,60 +81,10 @@ const Form = () => {
     );
 };
 
-function Forename(props) {
+const Error = ({message}) => {
     return (
-        <div className={"form-field " + props.size}>
-            <label htmlFor="forename">Forename</label>
-            <input id="forename" name="forename" type="text" value={props.forename} onChange={props.onChange}/>
-        </div>
+        <span className="error-alert">{message}</span>
     );
-}
-
-function Surname(props) {
-    return (
-        <div className={"form-field " + props.size}>
-            <label htmlFor="surname">Surname</label>
-            <input id="surname" name="surname" type="text" value={props.surname} onChange={props.onChange}/>
-        </div>
-    );
-}
-
-function Email(props) {
-    return (
-        <div className={"form-field " + props.size}>
-            <label htmlFor="email">Email Address</label>
-            <input id="email" name="email" type="text" value={props.email} onChange={props.onChange}/>
-        </div>
-    );
-}
-
-function DOB(props) {
-    return (
-        <div className={"form-field " + props.size}>
-            <label htmlFor="dob">Date of Birth</label>
-            <input id="dob" name="dateOfBirth" type="date" value={props.dateOfBirth} onChange={props.onChange}/>
-        </div>
-    );
-}
-
-function Affiliations(props) {
-    return (
-        <div className={"form-field " + props.size}>
-            <label>Affiliation</label><br/>
-            <input className="form-radio-input" type="radio" name="affiliation" value="staff" onChange={props.onChange}/>Staff<br/>
-            <input className="form-radio-input" type="radio" name="affiliation" value="student" onChange={props.onChange}/>Student<br/>
-            <input className="form-radio-input" type="radio" name="affiliation" value="associate" onChange={props.onChange}/>Associate<br/>
-        </div>
-    );
-}
-
-function Bio(props) {
-    return (
-        <div className={"form-field " + props.size}>
-            <label htmlFor="bio">Bio</label>
-            <input id="bio" name="bio" type="textarea" className="form-textarea-input" value={props.bio} onChange={props.onChange}/>
-        </div>
-    );
-}
+};
 
 export default Form;
