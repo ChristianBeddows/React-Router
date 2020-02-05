@@ -3,7 +3,10 @@ import {useForm} from 'react-hook-form';
 import "./Form.css";
 
 const Form = () => {
-    const {register, handleSubmit, errors} = useForm({mode: 'onBlur'});
+    const {register, handleSubmit, errors} = useForm({
+        mode: 'onBlur',
+        reValidateMode: 'onBlur',
+    });
     const [form, setForm] = useState({
         forename: '',
         surname: '',
