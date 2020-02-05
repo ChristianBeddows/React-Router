@@ -3,13 +3,14 @@ import {useForm} from 'react-hook-form';
 import "./Form.css";
 
 const Form = () => {
-    const {register, handleSubmit, errors} = useForm({
+    const {register, setValue, handleSubmit, triggerValidation, errors} = useForm({
         mode: 'onBlur',
         reValidateMode: 'onBlur',
     });
     const [form, setForm] = useState({
         forename: '',
         surname: '',
+        customElement: 'red',
         email: '',
         affiliation: '',
         dateOfBirth: '',
@@ -25,6 +26,25 @@ const Form = () => {
         const value = event.target.value;
 
         setForm({...form, [name]: value});
+    };
+
+    const toggleCustomElement = () => {
+        if (form.customElement === 'red') {
+            setForm({...form, customElement: 'green'});
+            setValue('customElement', 'green');
+        } else {
+            setForm({...form, customElement: 'red'});
+            setValue('customElement', 'red');
+        }
+        validate();
+    };
+
+    const validate = () => {
+        triggerValidation("customElement");
+    };
+
+    const customElementStyling = {
+        backgroundColor: form.customElement,
     };
 
     return (
@@ -45,6 +65,14 @@ const Form = () => {
                     {errors.surname && <Error message="This field is required."/>}
                 </div>
 
+            </div>
+
+            <div className="form-row">
+                <div className="form-field full">
+                    <label>Custom Input</label>
+                    <div className="custom-input" style={customElementStyling} onClick={toggleCustomElement} ref={register({name: 'customElement', type: 'custom'}, {validate: {isGreen: value => value === 'green'}})}/>
+                    {errors.customElement && <Error message="This must be green."/>}
+                </div>
             </div>
 
             <div className="form-row">
